@@ -3,7 +3,7 @@
 export default function Home() {
   return (
     <div>
-      Index page
+      Home page
     </div>
   )
 }
