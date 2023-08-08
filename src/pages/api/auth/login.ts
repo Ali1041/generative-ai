@@ -21,7 +21,7 @@ export default async function login(
     }
   })
   prisma.$disconnect()
-
+  console.log(user, !user)
   if (!user) {
     res.status(400).json({error: true, helperText: "User does not exist"})
   }

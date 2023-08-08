@@ -11,7 +11,6 @@ const useLoginHook = (email: inputState, password: inputState) => {
     });
 
     const onSubmit = async (e: React.MouseEvent) => {
-        e.preventDefault();
         if (email.error || password.error) {
             setIsError({
                 error: true,
@@ -37,13 +36,14 @@ const useLoginHook = (email: inputState, password: inputState) => {
             setIsLoading(false);
         }
         else {
-            throw new Error(data.data.message)
+            throw new Error(data.data.helperText)
         }
     }
      catch (err: any){
+        const errorMessage = err.response.data.helperText || 'Something went wrong. Please try again later.'
         setIsError({
             error: true,
-            helperText: err.response.data.message
+            helperText: errorMessage
         })
 
         setTimeout(() => {
