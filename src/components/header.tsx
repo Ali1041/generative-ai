@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { AuthContext } from "./HOC";
+import { signOut } from "next-auth/react";
 
 const LINKS = [
   {
@@ -22,6 +25,7 @@ const LINKS = [
 
 export const Header = () => {
   const route = useRouter();
+  const session = useContext(AuthContext);
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -36,12 +40,21 @@ export const Header = () => {
           </span>
         </a>
         <div className="flex md:order-2">
-          <Link href={"/create-property"}
+          <Link
+            href={"/create-property"}
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Get started
           </Link>
+          <button
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={() =>
+              signOut({ callbackUrl: "http://localhost:3000/auth/login" })
+            }
+          >
+            Sign Out
+          </button>
           <button
             data-collapse-toggle="navbar-cta"
             type="button"
@@ -76,7 +89,10 @@ export const Header = () => {
                 <li key={item.path}>
                   <Link
                     href={item.path}
-                    className={"block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:p-0" + (isActive ? " text-blue-700" : "")}
+                    className={
+                      "block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:p-0" +
+                      (isActive ? " text-blue-700" : "")
+                    }
                     aria-current="page"
                   >
                     {item.name}

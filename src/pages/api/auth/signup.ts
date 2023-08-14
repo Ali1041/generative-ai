@@ -28,7 +28,6 @@ export default async function signup(
     data: {
       email: email,
       password: hashPassword,
-      isVerified: true,
       name: "Max Hamilton",
       profession: "Software Engineer",
     },

@@ -1,4 +1,6 @@
 import axios, { AxiosInstance } from "axios";
+import { signIn } from "next-auth/react";
+
 
 export class AuthService {
   private readonly url: string =
@@ -18,7 +20,12 @@ export class AuthService {
   }
 
   login = async (email: string, password: string) => {
-    return await this.instance.post("/api/auth/login", { email, password });
+    console.log(email, password)
+    return await signIn("credentials", {
+      redirect: false,
+      email: email,
+      password: password,
+    });
   };
 
   signup = async (email: string, password: string) => {

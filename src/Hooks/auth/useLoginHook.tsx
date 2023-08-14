@@ -2,11 +2,11 @@ import { errorState, inputState } from "@/interfaces/login";
 import { authService } from "@/services";
 import { useState } from "react";
 import useErrorHook from "../useError";
-import {Cookies} from 'js-cookie'
+import { Cookies } from "js-cookie";
 
 const useLoginHook = (email: inputState, password: inputState) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {isError, setError} = useErrorHook()
+  const { isError, setError } = useErrorHook();
 
   const onSubmit = async (e: React.MouseEvent) => {
     if (email.error || password.error) {
@@ -19,16 +19,13 @@ const useLoginHook = (email: inputState, password: inputState) => {
     }
     setIsLoading(true);
     try {
+      console.log("herererere");
       const result = await authService.login(email.value, password.value);
-      if (result.status === 200) {
-        Cookies.set('token', result.data.token)
-        setIsLoading(false);
-      } else {
-        throw new Error(result.data.helperText);
-      }
+      console.log(result)
+      setIsLoading(false)
     } catch (err: any) {
       const errorMessage =
-        err.response.data.helperText ||
+        err.response?.data?.helperText ||
         "Something went wrong. Please try again later.";
       setError(true, errorMessage);
 

@@ -1,41 +1,73 @@
-import NextAuth from "next-auth/next"
-import CredentialsProvider from "next-auth/providers/credentials"
-
+import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth from "next-auth";
 
 export default NextAuth({
-    providers: [
-        CredentialsProvider({
-          // The name to display on the sign in form (e.g. 'Sign in with...')
-          name: 'Credentials',
-          // The credentials is used to generate a suitable form on the sign in page.
-          // You can specify whatever fields you are expecting to be submitted.
-          // e.g. domain, username, password, 2FA token, etc.
-          // You can pass any HTML attribute to the <input> tag through the object.
-          credentials: {
-            username: { label: "Email", type: "email", placeholder: "example@example.com" },
-            password: { label: "Password", type: "password" }
-          },
-          async authorize(credentials, req) {
-            // You need to provide your own logic here that takes the credentials
-            // submitted and returns either a object representing a user or value
-            // that is false/null if the credentials are invalid.
-            // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-            // You can also use the `req` object to obtain additional parameters
-            // (i.e., the request IP address)
-            const res = await fetch("/your/endpoint", {
-              method: 'POST',
-              body: JSON.stringify(credentials),
-              headers: { "Content-Type": "application/json" }
-            })
-            const user = await res.json()
-      
-            // If no error and we have user data, return it
-            if (res.ok && user) {
-              return user
-            }
-            // Return null if user data could not be retrieved
-            return null
-          }
-        })
-      ]
-})
+  providers: [
+    CredentialsProvider({
+      name: "Email",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "example@example.com",
+        },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        console.log("hereere");
+        const res = await fetch("http://localhost:3000/api/auth/login", {
+          method: "POST",
+          body: JSON.stringify(credentials),
+          headers: { "Content-Type": "application/json" },
+        });
+        const result = await res.json();
+        if (result.error) {
+          return null;
+        }
+        const user = result.user;
+        // If no error and we have user data, return it
+        if (res.status === 200 && user) {
+          console.log(user);
+          return {
+            token: {
+              id: user.id,
+              email: user.email,
+            },
+          };
+        }
+        return null;
+      },
+    }),
+  ],
+  callbacks: {
+    session: ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          randomKey: token.randomKey,
+        },
+      };
+    },
+    jwt: ({ token, user }) => {
+      if (user) {
+        const u = user as unknown as any;
+        return {
+          ...token,
+          id: u.id,
+          randomKey: u.randomKey,
+        };
+      }
+      return token;
+    },
+  },
+  secret: "somesecret",
+  jwt: {
+    secret: "somesecret",
+    encryption: true,
+  },
+  pages: {
+    signIn: "/auth/login",
+  },
+});

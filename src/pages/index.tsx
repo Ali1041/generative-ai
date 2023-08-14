@@ -1,6 +1,6 @@
 
 
-export default function Home() {
+function Home() {
   return (
     <div>
       <div>
@@ -13,3 +13,4 @@ export default function Home() {
     </div>
   )
 }
+export default Home;
