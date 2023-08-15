@@ -3,10 +3,13 @@ import { authService } from "@/services";
 import { useState } from "react";
 import useErrorHook from "../useError";
 import { Cookies } from "js-cookie";
+import { useRouter } from "next/router";
 
 const useLoginHook = (email: inputState, password: inputState) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { isError, setError } = useErrorHook();
+
+  const router = useRouter()
 
   const onSubmit = async (e: React.MouseEvent) => {
     if (email.error || password.error) {
@@ -19,10 +22,9 @@ const useLoginHook = (email: inputState, password: inputState) => {
     }
     setIsLoading(true);
     try {
-      console.log("herererere");
-      const result = await authService.login(email.value, password.value);
-      console.log(result)
+      await authService.login(email.value, password.value);
       setIsLoading(false)
+      router.push("/")
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.helperText ||

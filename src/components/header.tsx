@@ -10,16 +10,16 @@ const LINKS = [
     path: "/",
   },
   {
-    name: "Properties",
-    path: "/properties",
+    name: "Create Content",
+    path: "/create-content",
   },
   {
-    name: "Chat",
-    path: "/chat",
+    name: "Plaigarism Checker",
+    path: "/plaigarism-checker",
   },
   {
-    name: "Request Advice",
-    path: "/request-advice",
+    name: "Documents",
+    path: "/documents",
   },
 ];
 
@@ -36,7 +36,7 @@ export const Header = () => {
             alt="Flowbite Logo"
           />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Bed & Breakfast
+            AWriter
           </span>
         </a>
         <div className="flex md:order-2">

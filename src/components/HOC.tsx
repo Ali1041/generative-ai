@@ -7,26 +7,30 @@ import Signup from "@/pages/auth/signup";
 
 export const AuthContext = createContext({});
 
-export const HOC = (WrappedComponent: any): ReactElement => {
+export const HOC = (WrappedComponent: any) => {
   const { data } = useSession();
   // const data = {}
   const router = useRouter();
   console.log(data)
 
-  return (
-    <AuthContext.Provider value={{ session: data }}>
-      {data?.user ? (
-        <>
-          <Header />
-          <div className="max-w-7xl mx-auto p-5">
-            {WrappedComponent.children}
-          </div>
-        </>
-      ) : router.pathname == "/auth/login" ? (
-        <Login />
-      ) : (
-        <Signup />
-      )}
-    </AuthContext.Provider>
-  );
+  // Write me a function that checks if the user is logged in
+
+  if (data?.user){
+    return (
+      <AuthContext.Provider value={{ session: data }}>
+          <>
+            <Header />
+            <div className="max-w-7xl mx-auto p-5">
+              {WrappedComponent.children}
+            </div>
+          </>
+      </AuthContext.Provider>
+    );
+  }
+  else if (router.pathname === "/auth/login") {
+    return <Login />;
+  }
+  else if (router.pathname === "/auth/signup") {
+    return <Signup />;
+  }
 };
