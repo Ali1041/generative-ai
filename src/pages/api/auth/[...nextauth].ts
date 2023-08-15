@@ -27,7 +27,6 @@ export default NextAuth({
         const user = result.user;
         // If no error and we have user data, return it
         if (res.status === 200 && user) {
-          console.log(user);
           return {
             token: {
               id: user.id,
@@ -40,26 +39,13 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          randomKey: token.randomKey,
-        },
-      };
-    },
-    jwt: ({ token, user }) => {
-      if (user) {
-        const u = user as unknown as any;
-        return {
-          ...token,
-          id: u.id,
-          randomKey: u.randomKey,
-        };
-      }
+    jwt: async ({ token, user }) => {
+      user && (token.user = user);
       return token;
+    },
+    session: async ({ session, token }) => {
+      session.user = token.user; // Setting token in session
+      return session;
     },
   },
   secret: "somesecret",
