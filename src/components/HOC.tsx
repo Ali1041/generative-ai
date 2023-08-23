@@ -7,7 +7,7 @@ import Signup from "@/pages/auth/signup";
 
 export const AuthContext = createContext({});
 
-export const HOC = (WrappedComponent: any) => {
+export const HOC = (WrappedComponent: any): any => {
   const { data } = useSession();
   // const data = {}
   const router = useRouter();

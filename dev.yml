@@ -39,11 +39,28 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  # Add more containers below (nginx, postgres, etc.)
+  ai-service:
+    container_name: ai-service
+    build:
+      context: ./ai-service
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/article_creation
+    restart: always
+    ports:
+      - 8000:8000
+    networks:
+      - my_network
+    command: uvicorn article_creation.main:app --host 0.0.0.0 --reload
+    depends_on:
+      - postgres
+      - next-app
+
 volumes:
   postgres-data:
-# Define a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
+
 networks:
   my_network:
     external: true
