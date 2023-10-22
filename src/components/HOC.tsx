@@ -30,7 +30,7 @@ export const HOC = (WrappedComponent: any): any => {
   else if (router.pathname === "/auth/login") {
     return <Login />;
   }
-  else if (router.pathname === "/auth/signup") {
+  else {
     return <Signup />;
   }
 };
