@@ -1,8 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext } from "react";
-import { AuthContext } from "./HOC";
-import { signOut } from "next-auth/react";
 
 const LINKS = [
   {
@@ -25,7 +22,6 @@ const LINKS = [
 
 export const Header = () => {
   const route = useRouter();
-  const session = useContext(AuthContext);
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -49,9 +45,8 @@ export const Header = () => {
           </Link>
           <button
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={() =>
-              signOut({ callbackUrl: "http://localhost:3000/auth/login" })
-            }
+            onClick={() => console.log('sign out')}
+
           >
             Sign Out
           </button>
